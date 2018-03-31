@@ -650,7 +650,15 @@ colorWipe(0, 65535, 0, 100); // "Green" (depending on your LED wiring)
 }
 //------------------------------------------------------------------------------
 void loop(void) {
-  // Read any Serial data.
+    int soilValinit=readSoil();
+ // if (soilValinit>300){
+    if (true){
+      logData();
+      binaryToCsv();
+  }else{
+    
+  }
+ /* // Read any Serial data.
   do {
     delay(10);
   } while (Serial.available() && Serial.read() >= 0);
@@ -698,7 +706,7 @@ void loop(void) {
     testSensor();    
   } else {
     Serial.println(F("Invalid entry"));
-  }
+  }*/
 }
 
 
