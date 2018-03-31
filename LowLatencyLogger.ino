@@ -131,14 +131,14 @@ struct block_t {
 #define error(msg) {sd.errorPrint(&Serial, F(msg));fatalBlink();}
 //------------------------------------------------------------------------------
 
-
+/*****KIMBERLYS STUFF *******/
 // How many boards do you have chained?
 Adafruit_TLC59711 tlc = Adafruit_TLC59711(NUM_TLC59711, clock, dataTLC);
 
 int val = 0; //value for storing moisture value 
 int soilPin = A0;//Declare a variable for the soil moisture sensor 
 int soilPower = 7;//Variable for Soil moisture Power
-
+int counter2=0;
 //Rather than powering the sensor through the 3.3V or 5V pins, 
 //we'll use a digital pin to power the sensor. This will 
 //prevent corrosion of the sensor as it sits in the soil. 
@@ -213,6 +213,7 @@ void binaryToCsv() {
     return;
   }
   Serial.println();
+  Serial.println(F("There is current binary file"));
   Serial.print(F("FreeStack: "));
   Serial.println(FreeStack());
   
@@ -411,11 +412,15 @@ void recordBinFile() {
   uint32_t overrun = 0;
   uint32_t overrunTotal = 0;
   uint32_t logTime = micros();
+  int counter=0;
   while(1) {
      // Time for next data record.
     logTime += LOG_INTERVAL_USEC;
+    counter++;
     int soilVal=readSoil();
-    if (Serial.available()|| soilVal<300) {
+  if (counter>12000){
+ //   if (Serial.available()) {
+  //  if (Serial.available()|| soilVal<300) {
       closeFile = true;
     }  
     if (closeFile) {
@@ -589,7 +594,6 @@ void setup(void) {
   Serial.begin(9600);
   //BLUE WIRE FOR PD GOES TO NOTCH
 //GREEN WIRE FOR LED GOES TO NOTCH
-
 //Soil Moisture Stuff
  pinMode(soilPower, OUTPUT);//Set D7 as an OUTPUT
   digitalWrite(soilPower, LOW);//Set to LOW so no power is flowing through the sensor
@@ -650,16 +654,18 @@ colorWipe(0, 65535, 0, 100); // "Green" (depending on your LED wiring)
 }
 //------------------------------------------------------------------------------
 void loop(void) {
+ 
     int soilValinit=readSoil();
  // if (soilValinit>300){
-    if (true){
+    if (counter2<2){
       logData();
       binaryToCsv();
+      counter2++;
   }else{
-    
+    Serial.println("DONE");
   }
- /* // Read any Serial data.
-  do {
+  // Read any Serial data.
+ /* do {
     delay(10);
   } while (Serial.available() && Serial.read() >= 0);
   Serial.println();
