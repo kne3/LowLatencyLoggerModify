@@ -588,6 +588,9 @@ void testSensor() {
 }
 //------------------------------------------------------------------------------
 void setup(void) {
+
+   
+    
   if (ERROR_LED_PIN >= 0) {
     pinMode(ERROR_LED_PIN, OUTPUT);
   }
@@ -655,9 +658,11 @@ colorWipe(0, 65535, 0, 100); // "Green" (depending on your LED wiring)
 //------------------------------------------------------------------------------
 void loop(void) {
  
+  Serial.println("Waiting 5 seconds before starting");
+   delay(5000);
     int soilValinit=readSoil();
  // if (soilValinit>300){
-    if (counter2<2){
+    if (counter2<1){
       logData();
       binaryToCsv();
       counter2++;
